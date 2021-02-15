@@ -46,13 +46,14 @@ const soundsUrls = {
     }
 }
 
+
 const playRec = (lang, sound) => {
     $audioRecorder.src = soundsUrls[lang][sound];
     $audioRecorder.play();
 };
 
 
-const playSounds = (num) => {
+const play = (num) => {
     playRec($langInBoard.value, 'where');
 
     setTimeout(() => {
@@ -60,20 +61,21 @@ const playSounds = (num) => {
     },1500)
 }
 
-const createNumAndStar = () => {
+
+const start = () => {
     $board.innerHTML = ' ';
-    const randomNum = Math.floor(Math.random() * 10);
-    $board.dataset.find = randomNum;
+    const random = Math.floor(Math.random() * 10);
+    $board.dataset.find = random;
 
-    playSounds(randomNum);
+    play(random);
 
-    const currentAnswer = lottery(numRunning);
-    currentAnswer.forEach((num) => {
+    const data = lottery(numRunning);
+
+    data.forEach((num) => {
         const liElement = document.createElement('li');
         liElement.innerText = num;
         liElement.dataset.id = num;
         $board.appendChild(liElement);
-
     });
 
     const playButt = document.createElement('li');
@@ -82,23 +84,26 @@ const createNumAndStar = () => {
     $board.appendChild(playButt);
 }
 
-const lottery = (numArr) => {
-let cnt = numArr.length;
-while (cnt > 0) {
-    let i = Math.floor(Math.random() * cnt);
-    cnt--;
-    let temp = numArr[cnt];
-    numArr[cnt] = numArr[i];
-    numArr[i] = temp;
+
+
+
+const lottery = (numbers) => {
+let count = numbers.length;
+while (count > 0) {
+    let i = Math.floor(Math.random() * count);
+    count--;
+    let temp = numbers[count];
+    numbers[count] = numbers[i];
+    numbers[i] = temp;
 }
-return numArr;
+return numbers;
 }
 
 
-createNumAndStar();
+start();
 
 
-const selectUser = ($event) => {
+const user = ($event) => {
     const isLiElement = $event.target.nodeName === 'LI';
     if (!isLiElement) {
         return false;
@@ -106,35 +111,25 @@ const selectUser = ($event) => {
 
     const userChoice = $event.target.dataset.id;
     const boardFind = $board.dataset.find;
-
     const isPlayButt = $event.target.dataset.id === 'play-sound';
 
 if (isPlayButt) {
-    return playSounds(boardFind);
+    return user(boardFind);
 }
-
-
     if (userChoice === boardFind) {
         $board.classList.add('win')
-
-
         $audioRecorder.src = soundsUrls.win;
         $audioRecorder.play();
-
-
         // setTimeout(() => {
         //     playRec($langInBoard.value, userChoice)
         // },1500);
 
         setTimeout(() => {
             $board.classList.remove('win');
-            createNumAndStar();
-
-        },2000)
-
+            start();
+        },2000);
     }else {
         $board.classList.add('wrong');
-
         $audioRecorder.src = soundsUrls.wrong;
         $audioRecorder.play();
 
@@ -144,10 +139,9 @@ if (isPlayButt) {
 
         setTimeout(() => {
             $board.classList.remove('wrong');
-
         },2000);
     }
 }
 
 
-$board.addEventListener('click', selectUser);
+$board.addEventListener('click', user);
