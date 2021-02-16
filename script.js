@@ -12,8 +12,6 @@ const $board = document.getElementById('board'),
 // const soundsUrl = {
 //      ''
 // }
-
-
 const $audioRecorder = document.getElementById('audio');
 const soundsUrls = {
     wrong: 'https://s3-us-west-2.amazonaws.com/s.cdpn.io/250758/wronganswer.mp3',
@@ -47,19 +45,65 @@ const soundsUrls = {
 }
 
 
-const playRec = (lang, sound) => {
-    $audioRecorder.src = soundsUrls[lang][sound];
+const playRec = (sound) => {
+    const userLang = $langInBoard.value;
+    $audioRecorder.src = soundsUrls[userLang][sound];
     $audioRecorder.play();
 };
 
 
-const play = (num) => {
-    playRec($langInBoard.value, 'where');
+const soundsBox = (num) => {
+
+    playRec ('where');
 
     setTimeout(() => {
-        playRec($langInBoard.value, num);
+        playRec(num);
     },1500)
+
 }
+
+
+const userFind = ($event) => {
+
+    const isLiElement = $event.target.localName === 'li';
+    if (!isLiElement) { return false; }
+
+    const userChoice = $event.target.dataset.id;
+    const boardCorrect = $board.dataset.find;
+
+    const isPlayButt = $event.target.dataset.id === 'play-sound';
+    if (isPlayButt) {
+        return soundsBox(boardCorrect);
+    }
+
+    if (userChoice === boardCorrect) {
+        $board.classList.add('win');
+
+        $audioRecorder.src = soundsUrls.win;
+        $audioRecorder.play();
+
+
+        setTimeout(() => {
+            $board.classList.remove('win');
+            start();
+        },1500);
+
+    }else {
+        $board.classList.add('wrong');
+
+        $audioRecorder.src = soundsUrls.wrong;
+        $audioRecorder.play();
+
+        setTimeout(() => {
+            playRec(userChoice);
+        },1100)
+
+        setTimeout(() => {
+            $board.classList.remove('wrong');
+        },1300);
+    }
+};
+
 
 
 const start = () => {
@@ -67,7 +111,7 @@ const start = () => {
     const random = Math.floor(Math.random() * 10);
     $board.dataset.find = random;
 
-    play(random);
+    soundsBox(random);
 
     const data = lottery(numRunning);
 
@@ -103,45 +147,7 @@ return numbers;
 start();
 
 
-const user = ($event) => {
-    const isLiElement = $event.target.nodeName === 'LI';
-    if (!isLiElement) {
-        return false;
-    }
-
-    const userChoice = $event.target.dataset.id;
-    const boardFind = $board.dataset.find;
-    const isPlayButt = $event.target.dataset.id === 'play-sound';
-
-if (isPlayButt) {
-    return user(boardFind);
-}
-    if (userChoice === boardFind) {
-        $board.classList.add('win')
-        $audioRecorder.src = soundsUrls.win;
-        $audioRecorder.play();
-        // setTimeout(() => {
-        //     playRec($langInBoard.value, userChoice)
-        // },1500);
-
-        setTimeout(() => {
-            $board.classList.remove('win');
-            start();
-        },2000);
-    }else {
-        $board.classList.add('wrong');
-        $audioRecorder.src = soundsUrls.wrong;
-        $audioRecorder.play();
-
-        setTimeout(() => {
-            playRec($langInBoard.value, userChoice);
-        },1500)
-
-        setTimeout(() => {
-            $board.classList.remove('wrong');
-        },2000);
-    }
-}
 
 
-$board.addEventListener('click', user);
+
+$board.addEventListener('click', userFind);

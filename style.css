@@ -3,12 +3,11 @@ html, body {
 }
 
 body {
-    display: flex;
-    justify-content: center;
     align-items: center;
-    flex-direction: column;
     background: #43aa8b;
-
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 ::selection {
@@ -17,16 +16,16 @@ body {
 
 
 #board {
-    padding: 20px;
-    background: #0096c7;
-    width: 400px;
-    display: flex;
-    justify-content: center;
     align-items: center;
-    flex-wrap: wrap;
+    background: #0096c7;
     border-radius: 20px;
     border: 3px solid #718355;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    padding: 20px;
     transition: background 300ms;
+    width: 400px;
 }
 
 #board.wrong {
@@ -41,10 +40,9 @@ body {
 
 #board li {
     list-style: none;
-    /*display: inline-block;*/
     width: 100px;
     height: 100px;
-    border: 3px solid #00509d;
+    border: 1px solid #00509d;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -55,12 +53,11 @@ body {
     color: #fbff12;
     cursor: pointer;
     background: #1b4965;
-
 }
 
-#board li:hover {
-    background: #0096c7;
-}
+/*#board li:hover {*/
+/*    background: #0096c7;*/
+/*}*/
 #board li.start-play {
     flex-grow: 0.66;
     background-color: #9d4edd;
@@ -69,8 +66,8 @@ body {
     background-repeat: no-repeat;
 }
 
-#language{
-    color: red;
-    font-size: 20px;
-    border-radius: 50px;
-}
+/*#language{*/
+/*    color: red;*/
+/*    font-size: 20px;*/
+/*    border-radius: 50px;*/
+/*}*/
